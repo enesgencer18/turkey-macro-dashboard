@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/5 * * * *"
     
 jobs:
   build:
@@ -31,12 +31,12 @@ jobs:
 
       - name: Generate raw data
         run: |
-          source("raw_data/raw_data.R")
+          source("~/raw_data/raw_data.R")
         shell: Rscript {0} 
         
       - name: Generate processed data
         run: |
-          source("processed_data/data_processing.R")
+          source("~/processed_data/data_processing.R")
         shell: Rscript {0} 
         
       - name: Commit files
