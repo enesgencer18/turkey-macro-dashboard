@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Query dependencies
         run: |
-          install.packages('remotes')
           install.packages('sessioninfo')
           install.packages('XML')
           install.packages('methods')
@@ -28,18 +27,6 @@ jobs:
           install.packages('timetk')
           install.packages('skimr')
           install.packages('quantmod')
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        uses: actions/cache@v1
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
-      - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
 
       - name: Generate raw data
