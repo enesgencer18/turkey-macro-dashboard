@@ -7,7 +7,7 @@ jobs:
     name: refresh the dashboard
     runs-on: ubuntu-18.04 
     container: 
-          image: enesgencer18/turkey-macro-dashborad
+          image: enesgencer18/turkey-macro-dashboard:latest
     steps:
       - name: checkout_repo
         uses: actions/checkout@v2
