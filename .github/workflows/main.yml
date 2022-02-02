@@ -13,20 +13,6 @@ jobs:
         uses: actions/checkout@v2
         with: 
           ref: 'master'        
-      - name: Generate raw data
+      - name: Data refresh
         run: |
-          source("./raw_data/raw_data.R")
-        shell: Rscript {0} 
-        
-      - name: Generate processed data
-        run: |
-          source("./processed_data/data_processing.R")
-        shell: Rscript {0} 
-        
-      - name: Commit files
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add --all
-          git commit -am "add data"
-          git push 
+            bash ./data-refresh/data_refresh.sh "master" 
