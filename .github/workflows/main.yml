@@ -12,8 +12,7 @@ jobs:
       - name: checkout_repo
         uses: actions/checkout@v2
         with: 
-          ref: 'main'
-          
+          ref: 'master'        
       - name: Generate raw data
         run: |
           source("./raw_data/raw_data.R")
