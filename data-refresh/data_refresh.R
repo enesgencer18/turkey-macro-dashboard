@@ -1,4 +1,6 @@
 print("Loading new data...")
+print("Raw data is started to be updated!")
 source('./raw_data/raw_data.R')
+print("Raw data is updated!")
 source('./processed_data/data_processing.R')
 print("Data is up to date")
