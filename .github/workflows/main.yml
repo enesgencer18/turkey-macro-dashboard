@@ -7,36 +7,21 @@ jobs:
     name: refresh the dashboard
     runs-on: ubuntu-18.04 
     container: 
-          image: rocker/tidyverse
+          image: enesgencer18/turkey-macro-dashborad
     steps:
-      - name: Query dependencies
-        run: |
-          install.packages('sessioninfo')
-          install.packages('XML')
-          install.packages('methods')
-          install.packages('httr')
-          install.packages('xts')
-          install.packages('tidyverse')
-          install.packages('lubridate')
-          install.packages('tidymodels')
-          install.packages('ggthemes')
-          install.packages('zoo')
-          install.packages('PerformanceAnalytics')
-          install.packages('forecast')
-          install.packages('modeltime')
-          install.packages('timetk')
-          install.packages('skimr')
-          install.packages('quantmod')
-        shell: Rscript {0}
-
+      - name: checkout_repo
+        uses: actions/checkout@v2
+        with: 
+          ref: 'main'
+          
       - name: Generate raw data
         run: |
-          source("~/raw_data/raw_data.R")
+          source("./raw_data/raw_data.R")
         shell: Rscript {0} 
         
       - name: Generate processed data
         run: |
-          source("~/processed_data/data_processing.R")
+          source("./processed_data/data_processing.R")
         shell: Rscript {0} 
         
       - name: Commit files
