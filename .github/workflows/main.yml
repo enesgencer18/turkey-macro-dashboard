@@ -1,0 +1,33 @@
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+    
+jobs:
+  build:
+    name: refresh the dashboard
+    runs-on: ubuntu-18.04 
+    container: 
+          image: enesgencer18/turkey-macro-dashborad
+    steps:
+      - name: checkout_repo
+        uses: actions/checkout@v2
+        with: 
+          ref: 'main'
+          
+      - name: Generate raw data
+        run: |
+          source("./raw_data/raw_data.R")
+        shell: Rscript {0} 
+        
+      - name: Generate processed data
+        run: |
+          source("./processed_data/data_processing.R")
+        shell: Rscript {0} 
+        
+      - name: Commit files
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add --all
+          git commit -am "add data"
+          git push 
