@@ -10,7 +10,7 @@ library(skimr)
 library(tidymodels)
 library(ggthemes)
 
-load("~/turkey-macro-dashboard/df.Rda")
+load("./turkey-macro-dashboard/df.Rda")
 
 df <- na.locf(df)
 
@@ -62,4 +62,4 @@ forecast_df <- forecast_df %>%
 forecast_df <- forecast_df %>% 
   mutate(Month = as.factor(month(Date)))
 
-save(forecast_df, file = "~/turkey-macro-dashboard/processed_data/processed_data.Rdata")
+save(forecast_df, file = "./turkey-macro-dashboard/processed_data/processed_data.Rdata")

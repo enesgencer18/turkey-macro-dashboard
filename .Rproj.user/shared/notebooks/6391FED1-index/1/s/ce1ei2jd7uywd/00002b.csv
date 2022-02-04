@@ -1,0 +1,19 @@
+"0","lasso_preds %>% 
+  ggplot(aes(x = pred, y = CPI))+
+  geom_point(size = 2, alpha = 0.8, color = ""darkred"")+
+  geom_abline(intercept = 0, 
+              slope = 1, 
+              size = 0.3, 
+              linetype = ""dashed"", 
+              alpha = 0.8, 
+              color = ""midnightblue"")+
+  theme_clean()+
+  scale_y_continuous(labels = scales::percent)+
+  scale_x_continuous(labels = scales::percent)+
+  labs(x = ""Model Prediction"",
+       y = ""True Value"",
+       caption = ""Source: TCMB"")
+"
+"2","Warning:"
+"2"," Removed 1 rows containing missing values (geom_point).
+"
