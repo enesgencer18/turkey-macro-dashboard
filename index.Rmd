@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-library(flexdashboard)
+#library(flexdashboard)
 library(tidyverse)
 library(ggplot2)
 library(plotly)
@@ -21,8 +21,8 @@ library(RColorBrewer)
 
 ```{r}
 ### Load Data
-load("~/turkey-macro-dashboard/analysis/ml_data.Rdata")
-load("~/turkey-macro-dashboard/df.Rda")
+load("./analysis/ml_data.Rdata")
+load("./df.Rda")
 ```
 
 Row 
