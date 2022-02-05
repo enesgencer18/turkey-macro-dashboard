@@ -1,9 +1,0 @@
-"0","load(""./processed_data.Rdata"")
-"
-"2","Warning in readChar(con, 5L, useBytes = TRUE) :"
-"2","
- "
-"2"," cannot open compressed file './processed_data.Rdata', probable reason 'No such file or directory'
-"
-"2","Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
-"

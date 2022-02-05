@@ -98,9 +98,7 @@ df <- df %>%
   mutate(Date = as.Date(as.yearmon(Date, format = "%Y-%m")) + months(1) - days(1)) %>% 
   mutate_if(.predicate = is.character, .funs = as.numeric)
 
-
-
-save(df, file = "df.Rda")
+save(df, file = "./raw_data/df.Rda")
 
 
 

@@ -1,9 +1,0 @@
-"0","df %>%
-  plot_seasonal_diagnostics(.date_var = Date, 
-                            .value = BoP, 
-                            .geom_outlier_color = ""darkred"", 
-                            .feature_set = ""month.lbl"")
-"
-"2","Warning:"
-"2"," Removed 2 rows containing non-finite values (stat_boxplot).
-"

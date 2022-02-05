@@ -7,11 +7,8 @@ library(forecast)
 library(lubridate)
 library(modeltime)
 library(timetk)
-library(skimr)
-library(tidymodels)
-library(ggthemes)
 
-load("./df.Rda")
+load("./raw_data/df.Rda")
 
 df <- na.locf(df)
 

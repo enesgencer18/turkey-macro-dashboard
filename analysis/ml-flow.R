@@ -66,7 +66,7 @@ get_predictions <- function(x){
 }
 
 lasso_preds = get_predictions(lasso_preds)
-mape_vec(lasso_preds$CPI, lasso_preds$pred)
+yardstick::mape_vec(lasso_preds$CPI, lasso_preds$pred)
 lasso_test <- tibble(Date = test_data$Date,
                      pred = predict(lasso_fit, test_data))
 lasso_preds <- bind_rows(lasso_preds, lasso_test)
