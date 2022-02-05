@@ -5,5 +5,5 @@
                             .feature_set = ""month.lbl"")
 "
 "2","Warning:"
-"2"," Removed 1 rows containing non-finite values (stat_boxplot).
+"2"," Removed 2 rows containing non-finite values (stat_boxplot).
 "

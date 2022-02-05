@@ -1,3 +1,4 @@
+rm(list = ls())
 library(tidyverse)
 library(zoo)
 library(xts)
@@ -57,9 +58,39 @@ forecast_df <- forecast_df %>%
             by = "Date")
 
 forecast_df <- forecast_df %>% 
-  filter(Date > "2015-01-31")
+  filter(Date > "2014-07-31")
 
 forecast_df <- forecast_df %>% 
   mutate(Month = as.factor(month(Date)))
+
+forecast_df$CPI_Forecast <- NA
+forecast_date = as.Date(as.yearmon(today())) + months(1) - days(1)
+
+forecast_df <- forecast_df %>% 
+  filter(Date <= forecast_date)
+
+forecast_tbats <- function(x){
+  if(is.ts(x)){
+    optimal_model <- tbats(x)
+    forecasted <- forecast(optimal_model, 1)$mean %>% 
+      as.numeric()
+    forecasted
+  } else{
+    print("The provided input is not time-series object")
+  }
+}
+start_period <- 23
+end_period <- nrow(forecast_df) - 1
+start_year <- year(forecast_df$Date[1])
+start_month <- month(forecast_df$Date[1])
+
+forecast_df$CPI_Forecast[(start_period+1):nrow(forecast_df)] <- map_dbl(.x =start_period:end_period , 
+                                                                      .f = function(i){
+                                                                        cpi_ts <- ts(data = forecast_df$CPI[1:i], 
+                                                                                     start = c(start_year, start_month),
+                                                                                     frequency = 12)
+                                                                        forecast_tbats(cpi_ts)
+                                                                      })
+#forecast_df <- forecast_df[(start_period+1):nrow(forecast_df),]
 
 save(forecast_df, file = "./processed_data/processed_data.Rdata")

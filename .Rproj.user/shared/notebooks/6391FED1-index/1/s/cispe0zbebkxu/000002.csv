@@ -1,0 +1,15 @@
+"0","residuals <- lasso_preds %>% 
+  mutate(Residual = CPI - pred) %>% 
+  ggplot(aes(x = Date, y = Residual))+
+  geom_point(size = 2, alpha = 0.8, color = ""steelblue4"")+
+  geom_ribbon(stat='smooth', se=TRUE, alpha=0.01) +
+  geom_line(stat='smooth', alpha=1, color = ""darkred"")+
+  theme_pander() +
+  labs(y = ""Residual"",
+       x = ""Date"",
+       title = """")+
+  scale_y_continuous(labels = scales::percent)
+"
+"2","Error in mutate(., Residual = CPI - pred) : 
+  object 'lasso_preds' not found
+"
