@@ -18,8 +18,8 @@ test_data <- forecast_df %>%
 # Construct time slices for time-series cross validation
 time_slices <- trainControl(
   method = "timeslice",
-  initialWindow = 60,
-  fixedWindow = FALSE,
+  initialWindow = 36,
+  fixedWindow = TRUE,
   horizon = 3,
   savePredictions = TRUE,
   verboseIter = TRUE
