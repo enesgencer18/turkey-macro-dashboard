@@ -1,10 +1,13 @@
 ---
-title: "Macroeconomic Dashboard - TURKEY"
+title: "Macroeconomic Dashboard - Turkey"
 output: 
   flexdashboard::flex_dashboard:
     theme: 
       version: 4
       bootswatch: cyborg
+      navbar-bg: "darkred"
+      base_font:
+        google: Prompt
     orientation: rows
     vertical_layout: fill
 ---
@@ -44,7 +47,7 @@ inf_plot <-lasso_preds %>%
   geom_line(size = 0.5, alpha = 0.5, show.legend = FALSE)+
   geom_point(size = 0.75, alpha = 0.75, show.legend = FALSE)+
   scale_color_manual(values = c("steelblue4", "darkred"))+
-  theme_clean()+
+  theme_pander()+
   scale_y_continuous(labels = scales::percent)+
   scale_x_date(date_breaks = "3 month", date_labels =  "%m/%y")+
   labs(x = "Date",
@@ -63,7 +66,7 @@ Row
 ```{r}
 scatter <- lasso_preds %>% 
   ggplot(aes(x = pred, y = CPI))+
-  geom_point(size = 2, alpha = 0.8, color = "darkred")+
+  geom_point(size = 1.5, alpha = 0.8, color = "darkred")+
   geom_abline(intercept = 0, 
               slope = 1, 
               size = 0.3, 
@@ -86,7 +89,7 @@ ggplotly(scatter)
 residuals <- lasso_preds %>% 
   mutate(Residual = CPI - pred) %>% 
   ggplot(aes(x = Date, y = Residual))+
-  geom_point(size = 2, alpha = 0.8, color = "steelblue4")+
+  geom_point(size = 1, alpha = 0.8, color = "steelblue4")+
   geom_ribbon(stat='smooth', se=TRUE, alpha=0.01) +
   geom_line(stat='smooth', alpha=1, color = "darkred")+
   theme_pander() +
@@ -100,7 +103,7 @@ ggplotly(residuals)
 ```
 
 
-Survey Variables
+Tendency Surveys 
 ================================
 
 Row     
@@ -172,7 +175,7 @@ ggplotly(plot6)
 ```
 
 
-Production Variables 
+Production Statistics
 ================================
 
 Row
@@ -243,7 +246,7 @@ ggplotly(plot9)
 ```
 
 
-Foreign Trade Variables
+Balance of Payments 
 ================================
 
 Row
