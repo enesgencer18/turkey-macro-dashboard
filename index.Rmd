@@ -45,8 +45,8 @@ inf_plot <-lasso_preds %>%
   scale_color_manual(values = c("steelblue4", "darkred"))+
   theme_pander()+
   scale_y_continuous(labels = scales::percent)+
-  scale_x_date(breaks = seq(min(lasso_preds$Date),max(lasso_preds$Date),by="4 months"),
-             date_labels = '%m-%y')+
+  scale_x_date(breaks = seq(min(lasso_preds$Date),max(lasso_preds$Date),by="3 months"),
+             date_labels = '%m/%y')+
   labs(x = "Date",
        y = "",
        title = "",
@@ -344,65 +344,65 @@ ggplotly(plot10, tooltip = c("text"))
 ```
 
 
-Seasonality Analysis
-================================
+<!-- Seasonality Analysis -->
+<!-- ================================ -->
 
-Row {.tabset }
------------------------------------------------------------------------
+<!-- Row {.tabset } -->
+<!-- ----------------------------------------------------------------------- -->
 
-### Inflation
-```{r}
-forecast_df %>%
-  plot_seasonal_diagnostics(.date_var = Date, 
-                            .value = CPI, 
-                            .geom_outlier_color = "darkred",
-                            .feature_set = c("month.lbl", "year"))
-```
+<!-- ### Inflation -->
+<!-- ```{r} -->
+<!-- forecast_df %>% -->
+<!--   plot_seasonal_diagnostics(.date_var = Date,  -->
+<!--                             .value = CPI,  -->
+<!--                             .geom_outlier_color = "darkred", -->
+<!--                             .feature_set = c("month.lbl", "year")) -->
+<!-- ``` -->
 
-### Balance of Payments
-```{r}
-df %>%
-  plot_seasonal_diagnostics(.date_var = Date, 
-                            .value = BoP, 
-                            .geom_outlier_color = "darkred",
-                            .feature_set = c("month.lbl", "year"))
-```
+<!-- ### Balance of Payments -->
+<!-- ```{r} -->
+<!-- df %>% -->
+<!--   plot_seasonal_diagnostics(.date_var = Date,  -->
+<!--                             .value = BoP,  -->
+<!--                             .geom_outlier_color = "darkred", -->
+<!--                             .feature_set = c("month.lbl", "year")) -->
+<!-- ``` -->
 
-### Export Orders
-```{r}
-df %>%
-  plot_seasonal_diagnostics(.date_var = Date, 
-                            .value = Export_Orders, 
-                            .geom_outlier_color = "darkred",
-                            .feature_set = c("month.lbl", "year"))
-```
+<!-- ### Export Orders -->
+<!-- ```{r} -->
+<!-- df %>% -->
+<!--   plot_seasonal_diagnostics(.date_var = Date,  -->
+<!--                             .value = Export_Orders,  -->
+<!--                             .geom_outlier_color = "darkred", -->
+<!--                             .feature_set = c("month.lbl", "year")) -->
+<!-- ``` -->
 
-### Consumer Confidience
-```{r}
-df %>%
-  plot_seasonal_diagnostics(.date_var = Date, 
-                            .value = Consumer_Confidience, 
-                            .geom_outlier_color = "darkred",
-                            .feature_set = c("month.lbl", "year"))
-```
+<!-- ### Consumer Confidience -->
+<!-- ```{r} -->
+<!-- df %>% -->
+<!--   plot_seasonal_diagnostics(.date_var = Date,  -->
+<!--                             .value = Consumer_Confidience,  -->
+<!--                             .geom_outlier_color = "darkred", -->
+<!--                             .feature_set = c("month.lbl", "year")) -->
+<!-- ``` -->
 
-### Real Sector Confidience
-```{r}
-df %>%
-  plot_seasonal_diagnostics(.date_var = Date, 
-                            .value = RS_Confidience, 
-                            .geom_outlier_color = "darkred",
-                            .feature_set = c("month.lbl", "year"))
-```
+<!-- ### Real Sector Confidience -->
+<!-- ```{r} -->
+<!-- df %>% -->
+<!--   plot_seasonal_diagnostics(.date_var = Date,  -->
+<!--                             .value = RS_Confidience,  -->
+<!--                             .geom_outlier_color = "darkred", -->
+<!--                             .feature_set = c("month.lbl", "year")) -->
+<!-- ``` -->
 
-### Financial Sector Confidience
-```{r}
-df %>%
-  plot_seasonal_diagnostics(.date_var = Date, 
-                            .value = FS_Confidience, 
-                            .geom_outlier_color = "darkred",
-                            .feature_set = c("month.lbl", "year"))
-```
+<!-- ### Financial Sector Confidience -->
+<!-- ```{r} -->
+<!-- df %>% -->
+<!--   plot_seasonal_diagnostics(.date_var = Date,  -->
+<!--                             .value = FS_Confidience,  -->
+<!--                             .geom_outlier_color = "darkred", -->
+<!--                             .feature_set = c("month.lbl", "year")) -->
+<!-- ``` -->
 
 
 
