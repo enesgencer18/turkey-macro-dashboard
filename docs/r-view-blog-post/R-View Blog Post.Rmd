@@ -1,8 +1,8 @@
 ---
-title: "R Views Community Post Submission"
-author: "Your Name"
-date: "The Date You Hope To Post"
-summary: "A brief summary of your post here"
+title: "A Macroeconomics Dashboard on Turkey Inflation"
+author: "Enes Gencer"
+date: "31-03-2022"
+summary: "A flexdashboard on Turkey inflation using Rmarkdown, Docker, and Github Actions"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -11,17 +11,6 @@ editor_options:
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
-
-Thank you for writing a post for R Views! Please find the instructions below.
-
-## Instructions
-
-* Update the title, author, date, and summary fields above.
-* Save any additional files in the directory created by the R Markdown template.
-* Make sure that your post is reproducible! Restart R, clear your work space, and knit the R Markdown document. Everything should run smoothly.
-  * Check out Charlie Joey Hadley's post on [Reproducible Blogposts](https://www.findingyourway.io/blog/2018/02/14/2018-02-14_reproducible-blogposts/).
-
-## Write post
 
 Inflation is a hot topic for both global and Turkish macroeconomics nowadays. Inspired by Rami Krispin and reverse engineering his U.S. Electricity dashboard, I created a dashboard for Turkey's macroeconomics. You can find a one-month ahead inflation forecast, key monthly macroeconomic variables, and seasonality analyses.
 
@@ -52,9 +41,9 @@ The data set consists of monthly macroeconomic variables. The dependent variable
   - Balance of payments statistics
   - Exchange rate return
   - Month (to take into account seasonality)
-  - CPI_Forecast of TBATS model
+  - CPI Forecast of TBATS model (inspired by the stacking methods)
   
-I only included lags to avoid hindsight bias or the "knew-it-all-along" phenomenon. Second, the analysis does not cover the effect of interest rates on inflation. That is only because I have a pre-written script to pull monthly variables. Therefore, I do not want to spend time adjusting the frequency, and the effect of the interest rate is known anyway.
+First, I only included lags to avoid hindsight bias or the "knew-it-all-along" phenomenon. Second, the analysis does not cover the effect of interest rates on inflation. That is only because I have a pre-written script to pull monthly variables. Therefore, I do not want to spend time adjusting the frequency, and the effect of the interest rate is known anyway.
 
 ```{r}
 forecast_date = as.Date(as.yearmon(today())) + months(1) - days(1)
@@ -70,6 +59,29 @@ head(test_data)
 ```
 
 ## Modelling
+
+I evaluated multiple machine learning algorithms: Elastic Net, generalized linear models, Random Forest, and Support Vector Machines. I decided that Elastic Net has crucial advantages. First, there is a very high correlation between the explanatory variables. Notice that I included multiple lags of a given variable. Also, two different variables might have associations through multiple macroeconomic channels. Hence, multi-collinearity has to be taken into account. Second, I prefer an interpretable model to validate the model results with stylized macroeconomic facts. Third, in this case, it has higher performance (in terms of RMSE and MAPE) compared to more complex models like Support Vector Machines or Random Forest. Therefore, Elastic Net provides me a sweet spot for interpretability, performance, and speed.
+
+So, what is Elastic Net? It is a regularized regression technique that linearly combines L_1 and L_2 penalties. Basically, it is a combination of LASSO and Ridge regressions. In other words, it sets a group of the coefficient to zero and shrinks the remaining ones towards zero.
+
+Mathematically, elastic net minimize the following equation with respect to $\beta$:
+$\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)\|\beta\|_2^2/2 + \alpha \|\beta\|_1\right]$
+
+
+
+```{r}
+# Train the model
+
+elastic_net_fit <- train(
+  CPI ~ .,
+  data = train_data[,-1],
+  na.action = "na.pass",
+  method = "glmnet",
+  preProcess = c("center", "scale"),
+  trControl = time_slices
+)
+
+```
 
 I use time-series cross-validation to tune the hyper-parameters and evaluate the performance. To learn more details on time-series cross-validation, please visit:
 https://robjhyndman.com/hyndsight/tscv/
@@ -90,30 +102,22 @@ time_slices <- trainControl(
 
 ```
 
-Elastic net is a regularized regression technique that linearly combines L_1 and L_2 penalties. In other words, it is a combination of LASSO and Ridge regressions. Elastic net regularization has several advantages in my case. First, there is a very high correlation between the explanatory variables. Notice that I included multiple lags of a given variable. Also, given two different variables might have associations through several channels. Hence, multi-collinearity should be considered. Second, I desire an interpretable model. Third, in my case, it has higher performance (in terms of RMSE and MAPE) compared to more complex models like Random Forest or xgBoost. Considering the advantages I mentioned, detecting sparse variables and shrinking the remaining coefficients make perfect sense.
 
-```{r}
-# Train the model
 
-elastic_net_fit <- train(
-  CPI ~ .,
-  data = train_data[,-1],
-  na.action = "na.pass",
-  method = "glmnet",
-  preProcess = c("center", "scale"),
-  trControl = time_slices
-)
 
-```
 
 ## Results
 
+First, I get the best hyper parameters and collect the predictions of the selected model.
 
 ```{r}
 # Choose the best regularization parameters
 
 best_alpha = elastic_net_fit$bestTune[1] %>% pull
+best_alpha
+
 best_lambda = elastic_net_fit$bestTune[2] %>% pull
+best_lambda
 
 lasso_preds <- elastic_net_fit$pred %>% 
   filter(alpha == best_alpha,
@@ -149,6 +153,12 @@ lasso_test <- tibble(Date = test_data$Date,
                                     test_data))
 lasso_preds <- bind_rows(lasso_preds, lasso_test)
 
+
+```
+
+
+
+```{r}
 # Visualize results
 
 lasso_preds %>% 
@@ -168,12 +178,14 @@ lasso_preds %>%
   labs(x = "",
        y = "",
        subtitle = "Based on YoY CPI changes",
-       title = "Turkey Inflation",
-       caption = "Source: CBRT",
+       title = "One-month ahead inflation forecast",
        color = "")+
+  expand_limits(y = 0)+
   theme(plot.subtitle = element_text(face = "italic"))
-
 ```
+
+The plot shows a one-month ahead inflation forecast and actual inflation based on the YoY CPI changes.
+
 
 ```{r}
 lasso_preds %>% 
@@ -188,11 +200,31 @@ lasso_preds %>%
   theme_bw()+
   scale_y_continuous(labels = scales::percent)+
   scale_x_continuous(labels = scales::percent)+
+  expand_limits(y = 0, x = 0)+
   labs(title = "Model Prediction & True Value",
        x = "Model Prediction",
-       y = "True Value",
-       caption = "Source: TCMB")
+       y = "True Value")
 ```
+
+The second plot shows the predictions vs. the real values. You would expect to see the points are piled up around the 45-degree line. The model seems consistent in its predictions except for the three outliers, which will become sounder in the following plot.
+
+```{r}
+lasso_preds %>% 
+  mutate(Residual = CPI - pred) %>% 
+  ggplot(aes(x = Date, y = Residual))+
+  geom_point(size = 1.5, alpha = 0.8, color = "steelblue4")+
+  geom_ribbon(stat='smooth', se=TRUE, alpha=0.05) +
+  geom_line(stat='smooth', alpha=1, color = "darkred")+
+  theme_bw() +
+  labs(y = "Residuals",
+       x = "",
+       title = "Elastic Net Model Residuals",
+       subtitle = "Over time")+
+  scale_y_continuous(labels = scales::percent)
+```
+
+
+The third plot shows the model residuals over time. Notice that the model performance improves over time (until 2021), the smoothed residual curve gets closer to zero, and the frequency of outliers decreases. However, since 2021, the model performance has started to deteriorate caused by economic shocks. A different dynamic that cannot be taken into account comes into play.
 
 
 ```{r}
@@ -216,20 +248,29 @@ model_result %>%
   filter(!Overall_Effect == 0) %>%
   filter(!Variable == "(Intercept)") %>% 
   mutate(If_Positive = ifelse(Overall_Effect >0, "Positive", "Negative")) %>% 
-  ggplot(aes(x = reorder(Variable, Overall_Effect), y = Overall_Effect, fill = If_Positive))+
+  mutate(Sum = sum(abs(Overall_Effect))) %>% 
+  mutate(Percent_Effect = Overall_Effect / Sum) %>% 
+  ggplot(aes(x = reorder(Variable, abs(Overall_Effect)), y = abs(Percent_Effect), fill = If_Positive))+
   geom_col(alpha = 3)+
   scale_y_continuous(labels = scales::percent)+
+  expand_limits(y = c(0,0.45))+
   coord_flip() +
   labs(y = "",
        x = "",
        fill = "",
-       title = "The effect of macroeconomic variables on Turkey YoY CPI",
+       title = "The weighted effects macroeconomic variables on Turkey's Inflation",
        subtitle = "Shows the overall effect through different lags", 
        caption = "Source: CBRT")+
   theme_bw()+
   scale_fill_wsj()
 
-
-
 ```
+
+The final plot shows the weighted effect of macroeconomic variables on Turkey's inflation. Notice two things. First, the values on the x-axis are not coefficients, but the share of each variable in total effect. Second, it shows the overall impact coming through multiple lags.
+
+The findings are consistent with macroeconomic facts. First, the highest share of CPI confirms the well-known "inertia' phenomenon in inflation. "Inertia" refers to a situation in which prices in the whole economy adjust with the change in the price index. Therefore, it creates a self-sustaining loop. Secondly, the effect of annual changes in import prices follows CPI. It is known as one of the most significant determinants of Turkey's inflation. Finally, inflation expectations have the third-highest effect. Theoretically, economic agents process all the information available constitutes expectation about the future and maximizes their utility. When all economic agents believe that future inflation rises, it turns into a self-fulfilling prophecy. Therefore, it shows how important is to shape the beliefs and expectations of different agents in the economy.
+
+
+## Conclusion
+
 
