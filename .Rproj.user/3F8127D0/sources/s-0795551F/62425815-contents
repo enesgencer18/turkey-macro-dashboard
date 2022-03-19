@@ -59,11 +59,7 @@ forecast_df <- forecast_df %>%
 
 
 forecast_df <- forecast_df %>% 
-  select(-Import_Annual_Ret_Lag1, 
-         -Import_Annual_Ret_Lag2, 
-         -Import_Monthly_Ret_Lag1,
-         -Import_Monthly_Ret_Lag2
-         -BoP_Lag1,)
+  select(-Import_Annual_Ret_Lag1, -Import_Annual_Ret_Lag2, -BoP_Lag1)
 
 forecast_df <- forecast_df %>% 
   mutate(Month = as.factor(month(Date)))

@@ -1,0 +1,27 @@
+{
+    "id": "D7F9B941",
+    "path": "~/turkey-macro-dashboard/processed_data/data_processing.R",
+    "project_path": "processed_data/data_processing.R",
+    "type": "r_source",
+    "hash": "1772740832",
+    "contents": "",
+    "dirty": false,
+    "created": 1647691754813.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "tempName": "Untitled2",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "101,0",
+        "scrollLine": "66"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1647691929,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1647691929509,
+    "read_only": false,
+    "read_only_alternatives": []
+}
