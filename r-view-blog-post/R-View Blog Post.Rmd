@@ -120,7 +120,6 @@ best_alpha = elastic_net_fit$bestTune[1] %>% pull
 best_alpha
 
 best_lambda = elastic_net_fit$bestTune[2] %>% pull
-
 best_lambda
 
 lasso_preds <- elastic_net_fit$pred %>% 

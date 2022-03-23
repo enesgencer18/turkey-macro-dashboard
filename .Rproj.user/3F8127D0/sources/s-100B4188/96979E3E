@@ -1,0 +1,27 @@
+{
+    "id": "96979E3E",
+    "path": "~/turkey-macro-dashboard/index.Rmd",
+    "project_path": "index.Rmd",
+    "type": "r_markdown",
+    "hash": "927358497",
+    "contents": "",
+    "dirty": false,
+    "created": 1648030772099.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "74,30",
+        "scrollLine": "63",
+        "last_setup_crc32": ""
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1648030804,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1648030804861,
+    "read_only": false,
+    "read_only_alternatives": []
+}
