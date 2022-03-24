@@ -9,12 +9,15 @@ editor_options:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE) 
+
 ```
 
-Inflation is a hot topic for both global and Turkish macroeconomics nowadays. Inspired by Rami Krispin and reverse engineering his U.S. Electricity dashboard, I created a dashboard for Turkey's macroeconomics. You can find a one-month ahead inflation forecast, key monthly macroeconomic variables, and seasonality analyses.
+## Introduction
 
-The data and machine learning pipelines are automated via Docker, Github Actions, and Rmarkdown. The dashboard has too many dimensions to cover in a single blog post since I experimented with different aspects. As a result, in this blog post, I focus on the underlying economics and the forecasting method I choose, Elastic Net. In the coming blog posts, I might write on different aspects like flexdashboard, Docker, or a more interesting forecasting method like LSTM using Keras on R.
+Inflation is a hot topic for both global and Turkish macroeconomics nowadays. Inspired by Rami Krispin and reverse engineering his U.S. Electricity dashboard, I created a dashboard for Turkey's macroeconomics. You can find a one-month ahead inflation forecast and key monthly macroeconomic variables.
+
+The data and machine learning pipelines are automated via Docker, Github Actions, and R Markdown. The dashboard has too many dimensions to cover in a single blog post since I experimented with different aspects. As a result, in this blog post, I focus on the underlying economics and the forecasting method I choose, Elastic Net. In the coming blog posts, I might write on different aspects like flexdashboard, Docker, or a more interesting forecasting method like LSTM using Keras on R.
 
 ## Getting Started
 
@@ -43,7 +46,9 @@ The data set consists of monthly macroeconomic variables. The dependent variable
   - Month (to take into account seasonality)
   - CPI Forecast of TBATS model (inspired by the stacking methods)
   
-First, I only included lags to avoid hindsight bias or the "knew-it-all-along" phenomenon. Second, the analysis does not cover the effect of interest rates on inflation. That is only because I have a pre-written script to pull monthly variables. Therefore, I do not want to spend time adjusting the frequency, and the effect of the interest rate is known anyway.
+First, I only included lags to avoid hindsight bias or the "knew-it-all-along" phenomenon. For instance, as of today, the model predicts March inflation. However, March statistics are not announced yet. If the model is constructed to use March statistics, then it has no value in real-life prediction.
+
+Second, the analysis does not cover the effect of interest rates on inflation. That is only because I have a pre-written script to pull monthly variables. Therefore, I do not want to spend time adjusting the frequency. Also, the effect of the interest rate is known anyway. Central banks shift the price of money (or cost of borrowing) by changing interest rates, which is the primary tool to manage inflation. A rise in interest rate has two effects: first, it makes borrowing more costly, so people defer their consumption. Second, it might reduce the present value of financial assets. Hence, creating a negative wealth effect. Both impacts cause the inflationary pressures to ease.
 
 ```{r}
 forecast_date = as.Date(as.yearmon(today())) + months(1) - days(1)
@@ -64,29 +69,18 @@ I evaluated multiple machine learning algorithms: Elastic Net, generalized linea
 
 So, what is Elastic Net? It is a regularized regression technique that linearly combines L_1 and L_2 penalties. Basically, it is a combination of LASSO and Ridge regressions. In other words, it sets a group of the coefficient to zero and shrinks the remaining ones towards zero.
 
-Mathematically, elastic net minimize the following equation with respect to $\beta$:
+Mathematically, Elastic Net optimizes the following equation:
+
 $\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)\|\beta\|_2^2/2 + \alpha \|\beta\|_1\right]$
 
+Visual comparison between LASSO, Ridge, and Elastic Net penalties:
 
-
-```{r}
-# Train the model
-
-elastic_net_fit <- train(
-  CPI ~ .,
-  data = train_data[,-1],
-  na.action = "na.pass",
-  method = "glmnet",
-  preProcess = c("center", "scale"),
-  trControl = time_slices
-)
-
+```{r, out.width = '100%'}
+library(magick)
+magick::image_read(path = "~/turkey-macro-dashboard/r-view-blog-post/elastic-net.png")
 ```
+Source: Zou, H., & Hastie, T. (2005). Regularization and variable selection via the elastic net.
 
-I use time-series cross-validation to tune the hyper-parameters and evaluate the performance. To learn more details on time-series cross-validation, please visit:
-https://robjhyndman.com/hyndsight/tscv/
-
-I use a fixed window size. The idea is that the inflation dynamics might evolve over time. For instance, we have observed the increasing effect of the exchange rate on inflation in recent years. However, as a result of the commodity super-cycle, we might see the producer price index come into play. Therefore, a more dynamic modelling structure is ensured by fixed window size.
 
 ```{r}
 # Construct time slices for time-series cross validation
@@ -100,17 +94,30 @@ time_slices <- trainControl(
   verboseIter = FALSE
 )
 
+# Train the model
+
+elastic_net_fit <- train(
+  CPI ~ .,
+  data = train_data[,-1],
+  na.action = "na.pass",
+  method = "glmnet",
+  preProcess = c("center", "scale"),
+  trControl = time_slices
+)
+
 ```
 
+I use time-series cross-validation with a fixed window size to tune the hyper-parameters and evaluate the model performance. My idea is that the inflation dynamics might evolve. For instance, we have observed the increasing effect of the exchange rate on inflation in recent years. However, as a result of the commodity super-cycle, we might see the producer price index come into play. Therefore, having a more flexible model structure with respect to time makes sense. 
 
+In this case, the model is trained on the first 36 observations and evaluated on the 3 consecutive values on the test set. Then, the time slice shifts one month.
 
-
+To learn more details on time-series cross-validation, please visit: https://robjhyndman.com/hyndsight/tscv/
 
 ## Results
 
 First, I get the best hyper parameters and collect the predictions of the selected model.
 
-```{r}
+```{r, include = FALSE}
 # Choose the best regularization parameters
 
 best_alpha = elastic_net_fit$bestTune[1] %>% pull
@@ -158,7 +165,7 @@ lasso_preds <- bind_rows(lasso_preds, lasso_test)
 
 
 
-```{r}
+```{r, out.width = '100%'}
 # Visualize results
 
 lasso_preds %>% 
@@ -187,7 +194,7 @@ lasso_preds %>%
 The plot shows a one-month ahead inflation forecast and actual inflation based on the YoY CPI changes.
 
 
-```{r}
+```{r, out.width = '100%'}
 lasso_preds %>% 
   ggplot(aes(x = pred, y = CPI))+
   geom_point(size = 1.5, alpha = 0.8, color = "darkred")+
@@ -208,7 +215,7 @@ lasso_preds %>%
 
 The second plot shows the predictions vs. the real values. You would expect to see the points are piled up around the 45-degree line. The model seems consistent in its predictions except for the three outliers, which will become sounder in the following plot.
 
-```{r}
+```{r, out.width = '100%'}
 lasso_preds %>% 
   mutate(Residual = CPI - pred) %>% 
   ggplot(aes(x = Date, y = Residual))+
@@ -227,7 +234,7 @@ lasso_preds %>%
 The third plot shows the model residuals over time. Notice that the model performance improves over time (until 2021), the smoothed residual curve gets closer to zero, and the frequency of outliers decreases. However, since 2021, the model performance has started to deteriorate caused by economic shocks. A different dynamic that cannot be taken into account comes into play.
 
 
-```{r}
+```{r, out.width = '100%'}
 var_names <- coef(elastic_net_fit$finalModel, 
                   elastic_net_fit$finalModel$lambdaOpt) %>% 
   rownames()
@@ -268,9 +275,10 @@ model_result %>%
 
 The final plot shows the weighted effect of macroeconomic variables on Turkey's inflation. Notice two things. First, the values on the x-axis are not coefficients, but the share of each variable in total effect. Second, it shows the overall impact coming through multiple lags.
 
-The findings are consistent with macroeconomic facts. First, the highest share of CPI confirms the well-known "inertia' phenomenon in inflation. "Inertia" refers to a situation in which prices in the whole economy adjust with the change in the price index. Therefore, it creates a self-sustaining loop. Secondly, the effect of annual changes in import prices follows CPI. It is known as one of the most significant determinants of Turkey's inflation. Finally, inflation expectations have the third-highest effect. Theoretically, economic agents process all the information available constitutes expectation about the future and maximizes their utility. When all economic agents believe that future inflation rises, it turns into a self-fulfilling prophecy. Therefore, it shows how important is to shape the beliefs and expectations of different agents in the economy.
-
+Beyond the predictive abilities, the findings are consistent with macroeconomic facts. Remember that we want to interpret the model results. First, the highest share of CPI confirms the well-known "inertia' phenomenon in inflation. "Inertia" refers to a situation in which prices in the whole economy adjust with the change in the price index. Therefore, it creates a self-sustaining loop. Secondly, the effect of annual changes in import prices follows CPI. It is known as one of the most significant determinants of Turkey's inflation. It is mainly because of the structure of the Turkish economy and production. Inflation expectations have the third-highest effect. Theoretically, economic agents process all the information available constitutes expectation about the future and maximizes their utility. When the economic agents believe that future inflation rises, and behave accordingly, it turns into a self-fulfilling prophecy. Hence, it shows the importance of shaping the economic agents' beliefs and expectations for a policy-maker. Finally, the domestic producer price index is a variable with a relatively higher weight, which is consistent with the "pass-through effect". The producer price index is more volatile due to its higher sensitivity towards shocks, however, it is expected that the producer and consumer price indexes move together in the long run. Therefore, in a relatively short-term analysis (which covers six months), we observe a partial "pass-through" effect.
 
 ## Conclusion
 
+To sum up, I focus on the underlying economics and machine learning algorithm used to forecast inflation. The elastic net algorithm is chosen considering the three factors: interpretability of model results, time efficiency, and model performance. The model results are consistent with the stylized facts of Turkey's macroeconomics and underlying economic theory.
 
+Beyond economics and theory, however, there is still a lot to uncover. The data and machine learning pipelines are automated via Github Actions and Docker. The dashboard is constructed with R Markdown and flexdashboard. Hopefully, I will discuss them in the coming posts with different dashboards. Till then, you can always reach me if you have any questions.

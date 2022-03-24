@@ -44,7 +44,7 @@ inf_plot <-lasso_preds %>%
   geom_point(size = 0.75, alpha = 0.75, show.legend = FALSE)+
   scale_color_manual(values = c("steelblue4", "darkred"))+
   theme_pander()+
-  expand_limits(y = 0, x = 0)+
+  expand_limits(y = 0)+
   scale_y_continuous(labels = scales::percent)+
   scale_x_date(breaks = seq(min(lasso_preds$Date),max(lasso_preds$Date),by="3 months"),
              date_labels = '%m/%y')+

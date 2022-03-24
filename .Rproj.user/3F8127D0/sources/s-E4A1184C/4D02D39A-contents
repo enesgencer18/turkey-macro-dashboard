@@ -3,21 +3,21 @@ title: "A Macroeconomics Dashboard on Turkey Inflation"
 author: "Enes Gencer"
 date: "31-03-2022"
 summary: "A flexdashboard on Turkey inflation using Rmarkdown, Docker, and Github Actions"
-output: 
-  html_document: 
-    highlight: espresso
-    theme: sandstone
+output: html_document
 editor_options: 
   chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE) 
+
 ```
 
-Inflation is a hot topic for both global and Turkish macroeconomics nowadays. Inspired by Rami Krispin and reverse engineering his U.S. Electricity dashboard, I created a dashboard for Turkey's macroeconomics. You can find a one-month ahead inflation forecast, key monthly macroeconomic variables, and seasonality analyses.
+## Introduction
 
-The data and machine learning pipelines are automated via Docker, Github Actions, and Rmarkdown. The dashboard has too many dimensions to cover in a single blog post since I experimented with different aspects. As a result, in this blog post, I focus on the underlying economics and the forecasting method I choose, Elastic Net. In the coming blog posts, I might write on different aspects like flexdashboard, Docker, or a more interesting forecasting method like LSTM using Keras on R.
+Inflation is a hot topic for both global and Turkish macroeconomics nowadays. Inspired by Rami Krispin and reverse engineering his U.S. Electricity dashboard, I created a dashboard for Turkey's macroeconomics. You can find a one-month ahead inflation forecast and key monthly macroeconomic variables.
+
+The data and machine learning pipelines are automated via Docker, Github Actions, and R Markdown. The dashboard has too many dimensions to cover in a single blog post since I experimented with different aspects. As a result, in this blog post, I focus on the underlying economics and the forecasting method I choose, Elastic Net. In the coming blog posts, I might write on different aspects like flexdashboard, Docker, or a more interesting forecasting method like LSTM using Keras on R.
 
 ## Getting Started
 
@@ -69,7 +69,7 @@ I evaluated multiple machine learning algorithms: Elastic Net, generalized linea
 
 So, what is Elastic Net? It is a regularized regression technique that linearly combines L_1 and L_2 penalties. Basically, it is a combination of LASSO and Ridge regressions. In other words, it sets a group of the coefficient to zero and shrinks the remaining ones towards zero.
 
-Mathematically, you optimize the following equation:
+Mathematically, Elastic Net optimizes the following equation:
 
 $\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)\|\beta\|_2^2/2 + \alpha \|\beta\|_1\right]$
 
@@ -107,13 +107,17 @@ elastic_net_fit <- train(
 
 ```
 
-I use time-series cross-validation with a fixed window size to tune the hyper-parameters and evaluate the model performance. The idea is that the inflation dynamics might evolve. For instance, we have observed the increasing effect of the exchange rate on inflation in recent years. However, as a result of the commodity super-cycle, we might see the producer price index come into play. To learn more details on time-series cross-validation, please visit: https://robjhyndman.com/hyndsight/tscv/
+I use time-series cross-validation with a fixed window size to tune the hyper-parameters and evaluate the model performance. My idea is that the inflation dynamics might evolve. For instance, we have observed the increasing effect of the exchange rate on inflation in recent years. However, as a result of the commodity super-cycle, we might see the producer price index come into play. Therefore, having a more flexible model structure with respect to time makes sense. 
+
+In this case, the model is trained on the first 36 observations and evaluated on the 3 consecutive values on the test set. Then, the time slice shifts one month.
+
+To learn more details on time-series cross-validation, please visit: https://robjhyndman.com/hyndsight/tscv/
 
 ## Results
 
 First, I get the best hyper parameters and collect the predictions of the selected model.
 
-```{r}
+```{r, include = FALSE}
 # Choose the best regularization parameters
 
 best_alpha = elastic_net_fit$bestTune[1] %>% pull
@@ -275,4 +279,6 @@ Beyond the predictive abilities, the findings are consistent with macroeconomic 
 
 ## Conclusion
 
+To sum up, I focus on the underlying economics and machine learning algorithm used to forecast inflation. The elastic net algorithm is chosen considering the three factors: interpretability of model results, time efficiency, and model performance. The model results are consistent with the stylized facts of Turkey's macroeconomics and underlying economic theory.
 
+Beyond economics and theory, however, there is still a lot to uncover. The data and machine learning pipelines are automated via Github Actions and Docker. The dashboard is constructed with R Markdown and flexdashboard. Hopefully, I will discuss them in the coming posts with different dashboards. Till then, you can always reach me if you have any questions.

@@ -57,6 +57,14 @@ forecast_df <- forecast_df %>%
 forecast_df <- forecast_df %>% 
   filter(Date > "2014-07-31")
 
+
+forecast_df <- forecast_df %>% 
+  select(-Import_Annual_Ret_Lag1, 
+         -Import_Annual_Ret_Lag2, 
+         -Import_Monthly_Ret_Lag1,
+         -Import_Monthly_Ret_Lag2
+         -BoP_Lag1,)
+
 forecast_df <- forecast_df %>% 
   mutate(Month = as.factor(month(Date)))
 
@@ -91,3 +99,4 @@ forecast_df$CPI_Forecast[(start_period+1):nrow(forecast_df)] <- map_dbl(.x =star
 #forecast_df <- forecast_df[(start_period+1):nrow(forecast_df),]
 
 save(forecast_df, file = "./processed_data/processed_data.Rdata")
+

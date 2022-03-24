@@ -1,27 +1,27 @@
 {
-    "id": "3C6E7AF0",
+    "id": "4D02D39A",
     "path": "~/turkey-macro-dashboard/r-view-blog-post/R-View Blog Post.Rmd",
     "project_path": "r-view-blog-post/R-View Blog Post.Rmd",
     "type": "r_markdown",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1647511651025.0,
+    "created": 1648031035788.0,
     "source_on_save": false,
-    "relative_order": 1,
+    "relative_order": 2,
     "properties": {
         "chunk_output_type": "console",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "205,30",
-        "scrollLine": "190"
+        "cursorPosition": "17,263",
+        "scrollLine": "16"
     },
     "folds": "",
-    "lastKnownWriteTime": 1648030197,
+    "lastKnownWriteTime": 1648047648,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1648030197707,
+    "last_content_update": 1648047648161,
     "read_only": false,
     "read_only_alternatives": []
 }
