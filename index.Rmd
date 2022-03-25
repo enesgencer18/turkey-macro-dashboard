@@ -48,7 +48,7 @@ inf_plot <-lasso_preds %>%
   scale_y_continuous(labels = scales::percent)+
   scale_x_date(breaks = seq(min(lasso_preds$Date),max(lasso_preds$Date),by="3 months"),
              date_labels = '%m/%y')+
-  labs(x = "Date",
+  labs(x = "",
        y = "",
        title = "",
        caption = "Source: TCMB")+
@@ -93,7 +93,7 @@ residuals <- lasso_preds %>%
   geom_line(stat='smooth', alpha=1, color = "darkred")+
   theme_bw() +
   labs(y = "Residual",
-       x = "Date",
+       x = "",
        title = "")+
   scale_y_continuous(labels = scales::percent)
 ggplotly(residuals)
@@ -124,8 +124,8 @@ plot1 <- df %>%
     "Value:", round(..y..,1)
   )),stat='smooth', method = "loess", alpha=0.5, color = "firebrick2", formula = y ~ x)+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Inflation Expectations (12-months ahead)")
+  labs(x = "",
+       y = "")
 ggplotly(plot1, tooltip = c("text"))
 ```
 
@@ -146,8 +146,8 @@ plot2 <- df %>%
     "Value:", round(..y..,1)
   )),stat='smooth', method = "loess", alpha=0.5, color = "firebrick2", formula = y ~ x) +
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Consumer Confidience Index")
+  labs(x = "",
+       y = "")
 ggplotly(plot2, tooltip = c("text"))
 ```
 
@@ -171,8 +171,8 @@ plot3 <- df %>%
     "Value:", round(..y..,1)
   )), stat='smooth', method = "loess", alpha=0.5, color = "firebrick2", formula = y ~ x)+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Financial Sector Confidience Index")
+  labs(x = "",
+       y = "")
 ggplotly(plot3, tooltip = c("text"))
 ```
 
@@ -192,8 +192,8 @@ plot4 <- df %>%
     "Value:", round(..y..,1)
   )), stat='smooth', method = "loess", alpha=0.5, color = "firebrick2", formula = y ~ x)+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Real Sector Confidience Index")
+  labs(x = "",
+       y = "")
 ggplotly(plot4, tooltip = c("text"))
 ```
 
@@ -220,8 +220,8 @@ plot5 <- df %>%
     "Value:", round(..y..,1)
   )), stat='smooth', method = "loess", alpha=0.5, color = "firebrick2", formula = y ~ x)+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Composite Leading Indicator")
+  labs(x = "",
+       y = "")
 ggplotly(plot5, tooltip = c("text"))
 ```
 
@@ -242,8 +242,8 @@ plot6 <- df %>%
     "Value:", round(..y..,1)
   )),stat='smooth', method = "loess", alpha=0.5, color = "firebrick2", formula = y ~ x)+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Export Orders")
+  labs(x = "",
+       y = "")
 ggplotly(plot6, tooltip = c("text"))
 ```
 
@@ -266,12 +266,12 @@ plot7 <- df %>%
     "Value:", round(..y..,1)
   )),stat='smooth', method = "loess", alpha=0.5, color ="firebrick2", formula = y ~ x)+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Production Volume")
+  labs(x = "",
+       y = "")
 ggplotly(plot7, tooltip = c("text"))
 ```
 
-### Capacity Utilization Rate
+### Capacity Utilization Rate (%)
 
 ```{r}
 plot8 <- df %>% 
@@ -287,8 +287,8 @@ plot8 <- df %>%
     "Value:", round(..y..,1)
   )),stat='smooth', method = "loess", alpha=0.5, color = "firebrick2", formula = y ~ x)+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Capacity Utilization Rate (%)")
+  labs(x = "",
+       y = "")
 ggplotly(plot8, tooltip = c("text"))
 ```
 
@@ -314,8 +314,8 @@ plot9 <- df %>%
     "Value:", round(..y..,1)
   )),stat='smooth', method = "loess", alpha=0.5, color = "firebrick2", formula = y ~ x)+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE,formula = y ~ x, alpha=0.01)+
-  labs(x = "Date",
-       y = "Average Import Price in USD")
+  labs(x = "",
+       y = "")
 ggplotly(plot9, tooltip = c("text"))
   
 ```
@@ -340,8 +340,8 @@ plot10 <- df %>%
     "Value:", round(..y..,1)
   )),stat='smooth', method = "loess", alpha=0.5, color = "firebrick2")+
   geom_ribbon(stat='smooth',method = "loess", se=TRUE, alpha = 0.01)+
-  labs(x = "Date",
-       y = "Balance of Payments")
+  labs(x = "",
+       y = "")
 ggplotly(plot10, tooltip = c("text"))
 ```
 
