@@ -43,7 +43,7 @@ inf_plot <-lasso_preds %>%
   geom_line(size = 0.5, alpha = 0.5, show.legend = FALSE)+
   geom_point(size = 0.75, alpha = 0.75, show.legend = FALSE)+
   scale_color_manual(values = c("steelblue4", "darkred"))+
-  theme_pander()+
+  theme_bw()+
   expand_limits(y = 0)+
   scale_y_continuous(labels = scales::percent)+
   scale_x_date(breaks = seq(min(lasso_preds$Date),max(lasso_preds$Date),by="3 months"),
@@ -71,7 +71,7 @@ scatter <- lasso_preds %>%
               linetype = 3, 
               alpha = 0.8, 
               color = "steelblue4")+
-  theme_pander()+
+  theme_bw()+
   expand_limits(y = 0, x = 0)+
   scale_y_continuous(labels = scales::percent)+
   scale_x_continuous(labels = scales::percent)+
@@ -91,7 +91,7 @@ residuals <- lasso_preds %>%
   geom_point(size = 1, alpha = 0.8, color = "steelblue4")+
   geom_ribbon(stat='smooth', se=TRUE, alpha=0.01) +
   geom_line(stat='smooth', alpha=1, color = "darkred")+
-  theme_pander() +
+  theme_bw() +
   labs(y = "Residual",
        x = "Date",
        title = "")+
@@ -118,7 +118,7 @@ plot1 <- df %>%
     "Value:", round(..y..,1)
   )),size = 0.5, alpha = 0.75, show.legend = FALSE, , color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -140,7 +140,7 @@ plot2 <- df %>%
     "Value:", round(..y..,1)
   )),size = 0.5, alpha = 0.75, show.legend = FALSE, color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -165,7 +165,7 @@ plot3 <- df %>%
     "Value:", round(..y..,1)
   )),size = 0.5, alpha = 0.75, show.legend = FALSE, color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -186,7 +186,7 @@ plot4 <- df %>%
     "Value:", round(..y..,1)
   )), size = 0.5, alpha = 0.75, show.legend = FALSE, color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -214,7 +214,7 @@ plot5 <- df %>%
     "Value:", round(..y..,1)
   )), size = 0.5, alpha = 0.75, show.legend = FALSE, color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -236,7 +236,7 @@ plot6 <- df %>%
     "Value:", round(..y..,1)
   )),size = 0.5, alpha = 0.75, show.legend = FALSE, color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -260,7 +260,7 @@ plot7 <- df %>%
     "Value:", round(..y..,1)
   )),size = 0.5, alpha = 0.75, show.legend = FALSE, color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -281,7 +281,7 @@ plot8 <- df %>%
     "Value:", round(..y..,1)
   )),size = 0.5, alpha = 0.75, show.legend = FALSE, color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -308,7 +308,7 @@ plot9 <- df %>%
     "Value:", round(..y..,1)
   )),size = 0.5, alpha = 0.75, show.legend = FALSE, , color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
@@ -334,7 +334,7 @@ plot10 <- df %>%
     "Value:", round(..y..,1)
   )),size = 0.5, alpha = 0.75, show.legend = FALSE, color = "steelblue4")+
   scale_x_date(date_breaks = "6 month", date_labels =  "%m/%y")+
-  theme_pander()+
+  theme_bw()+
   geom_line(aes(text = paste(
     "Date: ", as.Date(..x.., origin = "1970-01-01"), "<br>",
     "Value:", round(..y..,1)
