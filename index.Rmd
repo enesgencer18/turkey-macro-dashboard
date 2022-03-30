@@ -46,8 +46,7 @@ inf_plot <-lasso_preds %>%
   theme_bw()+
   expand_limits(y = 0)+
   scale_y_continuous(labels = scales::percent)+
-  scale_x_date(breaks = seq(min(lasso_preds$Date),max(lasso_preds$Date),by="3 months"),
-             date_labels = '%m/%y')+
+  scale_x_date(date_breaks="1 year", date_labels = '%Y')+
   labs(x = "",
        y = "",
        title = "",
