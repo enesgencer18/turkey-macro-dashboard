@@ -51,10 +51,7 @@ First, I only included lags to avoid hindsight bias or the "knew-it-all-along" p
 Second, the analysis does not cover the effect of interest rates on inflation. That is only because I have a pre-written script to pull monthly variables. Therefore, I do not want to spend time adjusting the frequency. Also, the effect of the interest rate is known anyway. Central banks shift the price of money (or cost of borrowing) by changing interest rates, which is the primary tool to manage inflation. A rise in interest rate has two effects: first, it makes borrowing more costly, so people defer their consumption. Second, it might reduce the present value of financial assets. Hence, creating a negative wealth effect. Both impacts cause the inflationary pressures to ease.
 
 ```{r}
-forecast_date = case_when(
-  day(today()) > 15 ~ as.Date(as.yearmon(today())) + months(1) - days(1),
-  TRUE ~ as.Date(as.yearmon(today())) - 1
-)
+forecast_date = "2022-03-31"
 
 train_data <- forecast_df %>% 
   filter(Date < forecast_date)
