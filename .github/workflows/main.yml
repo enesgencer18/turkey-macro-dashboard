@@ -5,7 +5,7 @@ on:
 jobs:
   build:
     name: refresh the dashboard
-    runs-on: ubuntu-18.04 
+    runs-on: ubuntu-22.04 
     container: 
           image: enesgencer18/turkey-macro-dashboard:latest
     steps:
